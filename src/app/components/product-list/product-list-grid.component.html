@@ -10,9 +10,15 @@
                         <img src="{{ tempProduct.imageUrl }}" class="img-responsive">
                         <h1>{{ tempProduct.name }}</h1>
                         <div class="price">{{ tempProduct.unitPrice | currency:'INR' }}</div>
+                        <h2>{{currentCategoryId}}</h2>
                         <a href="#" class="primary-btn">Add to cart</a>
                     </div>
 
+                </div>
+
+                <!-- If the Products are Empty-->
+                <div *ngIf ="products?.length == 0" class="alert alert-danger col-md-12" role="alert">
+                    No Products Found !!! 
                 </div>
 
             </div>
