@@ -59,7 +59,7 @@ export class ProductListComponent implements OnInit {
 
     if(hasCategoryId){
       //Get the "id" param String and convert to number using the "+" symbol
-      this.currentCategoryId = +this.route.snapshot.paramMap.has('id');
+      this.currentCategoryId = this.route.snapshot.paramMap.get('id');
       console.log('Insiade IF Check - currentCategoryId -> ' + this.currentCategoryId );
     }
     else{

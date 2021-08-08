@@ -17,6 +17,12 @@ export class ProductService {
   constructor(private HttpClient : HttpClient) { }
 
 
+  getProduct(productId: number): Observable<Product>{
+    //Fetching the product based on ID for Master-Detail view
+    const productUrl = `${this.baseUrl}/${productId}`;
+    return this.HttpClient.get<Product>(productUrl);
+  }
+
   getProductList(theCategoryId : number): Observable<Product[]>{
 
     //Building a URL based on categoryId
@@ -44,6 +50,7 @@ export class ProductService {
       map(response => response._embedded.products)
     );
   }
+
 
 }
 
