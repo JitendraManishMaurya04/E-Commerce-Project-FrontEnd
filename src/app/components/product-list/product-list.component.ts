@@ -11,9 +11,16 @@ import { ProductService } from 'src/app/services/product.service';
 })
 export class ProductListComponent implements OnInit {
 
-  products : Product[] | any;
+  products : Product[] = [];
   currentCategoryId: number | any;
-  searchMode : Boolean | any;
+  previousCategoryId: number | any;
+  searchMode : Boolean = false;
+  previousKeyword : any = null;
+
+  //properties for Pagination Support
+  thePageNumber: number = 1;
+  thePageSize: number = 5;
+  theTotalElements: number = 0;
   
   constructor(private productListService : ProductService,
               private route: ActivatedRoute) { }
@@ -43,11 +50,31 @@ export class ProductListComponent implements OnInit {
     const theKeyword: string | any = this.route.snapshot.paramMap.get('keyword');
     console.log('Search Bar Keyword Value -> ' + theKeyword );
 
-    this.productListService.saerchProducts(theKeyword).subscribe(
-      data => {
-        this.products = data;
-      }
-    );
+    //If we have different search Keywords than previous then Reset the thePageNumber back to 1
+    if(this.previousCategoryId != this.currentCategoryId){
+      this.thePageNumber = 1;
+    }
+    
+    this.previousKeyword = theKeyword;
+    console.log(`currentKeyword=${theKeyword}, thePageNumber=${this.thePageNumber}`);
+    
+    //Get the Product List for the given searched Keyword
+    this.productListService.searchProductPaginate(this.thePageNumber - 1, 
+                                                  this.thePageSize, 
+                                                  theKeyword)
+                                                  .subscribe(
+                                                    data  => {
+                                                    this.products = data._embedded.products;
+                                                    this.thePageNumber = data.page.number + 1;
+                                                    this.thePageSize = data.page.size;
+                                                    this.theTotalElements = data.page.totalElements;
+                                                  });
+
+    // this.productListService.searchProducts(theKeyword).subscribe(
+    //   data => {
+    //     this.products = data;
+    //   }
+    // );
   }
 
 //Handling Products List By Category ID:
@@ -68,13 +95,49 @@ export class ProductListComponent implements OnInit {
       console.log('Insiade ELSE Check - currentCategoryId -> ' + this.currentCategoryId );
     }
 
+    //If we have different categoryId than previous then Reset the thePageNumber back to 1
+    if(this.previousCategoryId != this.currentCategoryId){
+      this.thePageNumber = 1;
+    }
+
+    this.previousCategoryId = this.currentCategoryId;
+    console.log(`currentCategoryId=${this.currentCategoryId}, thePageNumber=${this.thePageNumber}`);
+
+
     //Get the Product List for the given Category ID
-    this.productListService.getProductList(this.currentCategoryId).subscribe(
-      data => {
-        console.log('Product List For Category-ID->' + this.currentCategoryId + ' = '  + JSON.stringify(data));
-        this.products = data;
-      }
-    );
+    this.productListService.getProductListPaginate(this.thePageNumber - 1, 
+                                           this.thePageSize, 
+                                           this.currentCategoryId)
+                                           .subscribe(
+                                             data  => {
+                                              this.products = data._embedded.products;
+                                              this.thePageNumber = data.page.number + 1;
+                                              this.thePageSize = data.page.size;
+                                              this.theTotalElements = data.page.totalElements;
+                                          });
+
+    // this.productListService.getProductList(this.currentCategoryId).subscribe(
+    //   data => {
+    //     console.log('Product List For Category-ID->' + this.currentCategoryId + ' = '  + JSON.stringify(data));
+    //     this.products = data;
+    //   }
+    // );
+  }
+
+  // processResult(){
+  //   return data  => {
+  //     this.products = data._embedded.product;
+  //     this.thePageNumber = data.page.number + 1;
+  //     this.thePageSize = data.page.size;
+  //     this.theTotalElements = data.page.totalElements;
+  //   };
+  // }
+
+  //Takes pageSize user-input from UI
+  updatePageSize(event : Event | any){
+    this.thePageSize = event.target.value;
+    this.thePageNumber = 1;
+    this.listProducts();
   }
 
 }
