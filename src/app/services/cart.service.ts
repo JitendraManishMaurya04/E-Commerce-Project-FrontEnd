@@ -39,6 +39,25 @@ export class CartService {
     this.computeCartTotals();
   }
 
+  //Removing Items from Cart Logic
+  removeFromCart(theCartItem: CartItem){
+    theCartItem.quantity--;
+
+    if(theCartItem.quantity === 0){
+      //Finding Item Index
+      const itemIndex = this.cartItems.findIndex( tempCartItem => tempCartItem.id === theCartItem.id );
+
+      //Removing Item if Index is found and greater than -1
+      if(itemIndex > -1){
+        this.cartItems.splice(itemIndex, 1);
+      }
+    }
+    else{
+      this.computeCartTotals();
+    }
+  }
+
+
   computeCartTotals() {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;

@@ -683,14 +683,14 @@ select{
     margin:0
 }
 table.table.table-bordered{
-    border:1px solid #ccc;
+    border:1px solid rgb(20, 1, 1);
     background:#fff
 }
 .table-bordered td,.table-bordered th{
-    border:1px solid #dee2e6
+    border:1px solid #09060c
 }
 table.table.table-bordered th{
-    BACKGROUND:#0da8e4;
+    BACKGROUND:#4f0594;
     color:#fff;
     font-size:14px;
     padding:7px
