@@ -15,15 +15,15 @@ export class CartService {
 
   constructor() { }
 
-  addToCart(theCartItem: CartItem){
+  addToCart(theCartItem: CartItem) {
 
     //Check if the Item is already present in the Cart
     let alreadyExistsInCart: boolean = false;
 
-    if(this.cartItems.length > 0){
+    if (this.cartItems.length > 0) {
       //Find the Item in the Cart based on Item-ID
-      for(let tempCartItem of this.cartItems){
-        if(tempCartItem.id === theCartItem.id){
+      for (let tempCartItem of this.cartItems) {
+        if (tempCartItem.id === theCartItem.id) {
           alreadyExistsInCart = true;
           tempCartItem.quantity++;
           break;
@@ -32,7 +32,7 @@ export class CartService {
 
     }
 
-    if(alreadyExistsInCart === false){
+    if (alreadyExistsInCart === false) {
       this.cartItems.push(theCartItem);
     }
 
@@ -40,20 +40,24 @@ export class CartService {
   }
 
   //Removing Items from Cart Logic
-  removeFromCart(theCartItem: CartItem){
+  removeFromCart(theCartItem: CartItem) {
     theCartItem.quantity--;
 
-    if(theCartItem.quantity === 0){
-      //Finding Item Index
-      const itemIndex = this.cartItems.findIndex( tempCartItem => tempCartItem.id === theCartItem.id );
-
-      //Removing Item if Index is found and greater than -1
-      if(itemIndex > -1){
-        this.cartItems.splice(itemIndex, 1);
-      }
+    if (theCartItem.quantity === 0) {
+      this.remove(theCartItem);
     }
-    else{
+    else {
       this.computeCartTotals();
+    }
+  }
+
+  remove(theCartItem: CartItem) {
+    //Finding Item Index
+    const itemIndex = this.cartItems.findIndex(tempCartItem => tempCartItem.id === theCartItem.id);
+
+    //Removing Item if Index is found and greater than -1
+    if (itemIndex > -1) {
+      this.cartItems.splice(itemIndex, 1);
     }
   }
 
@@ -62,7 +66,7 @@ export class CartService {
     let totalPriceValue: number = 0;
     let totalQuantityValue: number = 0;
 
-    for(let currentCartItem of this.cartItems){
+    for (let currentCartItem of this.cartItems) {
       totalPriceValue += currentCartItem.quantity * currentCartItem.unitPrice;
       totalQuantityValue += currentCartItem.quantity;
     }
@@ -72,6 +76,6 @@ export class CartService {
     this.totalQuantity.next(totalQuantityValue);
 
     console.log(`TOTAL CART VALUE: ${totalPriceValue}, ${totalQuantityValue}`);
-    
+
   }
 }

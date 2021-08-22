@@ -35,7 +35,7 @@
                                     </div>
 
                                     <div class="col">
-                                        <button (click)="decrementQuantity(tempCartItem)"class="btn btn-primary btn-sm">
+                                        <button (click)="decrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
                                             <i class="fas fa-minus"></i>
                                         </button>
                                     </div>
@@ -43,6 +43,9 @@
                                     <div class="col-8"></div>
                                 </div>
                             </div>
+                            
+                            <button (click)="remove(tempCartItem)" class="btn btn-danger btn-sm">Remove</button>
+
                             <p class="mt-2"><b>Subtotal: </b>{{ tempCartItem.quantity * tempCartItem.unitPrice |
                                 currency: 'INR' }}</p>
                         </td>
