@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  funToShopApiUrl: "https://localhost:8181/api"
+  funToShopApiUrl: "https://localhost:9898/api"
 };
 
 /*
